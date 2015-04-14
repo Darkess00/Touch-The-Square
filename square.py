@@ -7,6 +7,7 @@ import menu
 #constantes
 WIDTH = 640
 HEIGHT = 480
+REWARDS = {'1': 20, '2': 30, '3': 40, '4': 50, '5': 60}
 
 #clases
 class Square(pygame.sprite.Sprite):
@@ -61,13 +62,54 @@ def load_text(texto,x,y,color=(255,255,255)):
 	salida_rect.centery=y
 	return salida, salida_rect        
 
+def check_rewards(contador):
+		f=open('data/rewards','r')
+		number=int(f.read())
+		f.close()
+		f=open('data/rewards','w')
+		if number == 0 and contador==REWARDS['1']:
+			f.write('1')
+			f.close()
+		elif number == 1 and contador==REWARDS['2']:
+			f.write('2')
+			f.close()
+		elif number == 2 and contador==REWARDS['3']:
+			f.write('3')
+			f.close()
+		elif number == 3 and contador==REWARDS['4']:
+			f.write('4')
+			f.close()
+		elif number == 4 and contador==REWARDS['5']:
+			f.write('5')
+			f.close()
+		else:
+			f.write(str(number))
+			f.close()
+
+def your_top():
+	f=open('data/max','r')
+	max=int(f.read())
+	f.close()
+	return max
+
+def write_top(top):
+	f=open('data/max','r')
+	ftop=int(f.read())
+	f.close()
+	if top>ftop:
+		f=open('data/max','w')
+		f.write(str(top))
+		f.close()
+	
+
+
 #--------------------------------------------------
 def main():
 	screen=pygame.display.set_mode((WIDTH,HEIGHT))
 	pygame.display.set_caption('Square Game')
 	background=load_image('images/black_background.png')
     
-	menu.menu(background)
+	menu.menu(background,your_top())
 	
 	square=Square()
 	
@@ -91,15 +133,24 @@ def main():
 				handled=False
 			if eventos.type == MOUSEBUTTONDOWN:
 				square.update(time)      
-                
+				
+		if contador<your_top():
+			top=your_top()
+		else:
+			top=contador
+		
+		write_top(top)
+		                
 		square.update(time)
 		
 		if clic[0] and pygame.Rect.collidepoint(square.rect,pygame.mouse.get_pos()) and not handled:
 			contador +=1
 			handled=True
+			check_rewards(contador)
 		
 		if timer/float(1000)>=60:
-			fin,fin_rect=load_text('You touched the square ' + str(contador) +' times',WIDTH/2,HEIGHT/2)
+			fin,fin_rect=load_text('You touched the square ' + str(contador) +' times',WIDTH/2,HEIGHT/3)
+			max,max_rect=load_text('Your max touches: ' + str(top),WIDTH/2,HEIGHT*0.66)
 			while True:
 				for events in pygame.event.get():
 					if events.type==QUIT:
@@ -111,6 +162,7 @@ def main():
 						
 				screen.blit(background,(0,0))
 				screen.blit(fin,fin_rect)
+				screen.blit(max,max_rect)
 				pygame.display.flip()
 				
 		
