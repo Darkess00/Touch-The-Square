@@ -1,8 +1,6 @@
 #imports
-import pygame
+import pygame, random, sys, menu
 from pygame.locals import *
-import sys
-import menu
 
 #constantes
 WIDTH = 640
@@ -17,19 +15,38 @@ class Square(pygame.sprite.Sprite):
 		self.rect=self.image.get_rect()
 		self.rect.centerx=WIDTH/2
 		self.rect.centery=HEIGHT/2
-		self.speedx=1
-		self.speedy=1
+		self.speedx=3
+		self.speedy=3
 		
 	def update(self,time):
 		
 		if self.rect.left<=0:
-			self.speedx=1
+			self.speedx=random.randint(5,10)*random.random()
+			if(self.rect.centery<HEIGHT/2):
+				self.speedy=random.randint(5,10)*random.random()
+			elif(self.rect.centery>=HEIGHT/2):
+				self.speedy=random.randint(-10,-5)*random.random()
+		
 		elif self.rect.right>=WIDTH:
-			self.speedx=-1
+			self.speedx=random.randint(-10,-5)*random.random()
+			if(self.rect.centery<HEIGHT/2):
+				self.speedy=random.randint(5,10)*random.random()
+			elif(self.rect.centery>=HEIGHT/2):
+				self.speedy=random.randint(-10,-5)*random.random()
+				
 		if self.rect.top<=0:
-			self.speedy=1
+			self.speedy=random.randint(5,10)*random.random()
+			if self.rect.centerx<WIDTH/2:
+				self.speedx=random.randint(5,10)*random.random()
+			elif(self.rect.centery>=HEIGHT/2):
+				self.speedx=random.randint(-10,-5)*random.random()
+		
 		elif self.rect.bottom>=HEIGHT:
-			self.speedy=-1
+			self.speedy=random.randint(-10,-5)*random.random()
+			if(self.rect.centerx<WIDTH/2):
+				self.speedx=random.randint(5,10)*random.random()
+			elif(self.rect.centerx>=WIDTH/2):
+				self.speedx=random.randint(-10,-5)*random.random()
 		
 		self.rect.centerx+=self.speedx*time
 		self.rect.centery+=self.speedy*time
@@ -108,23 +125,22 @@ def main():
 	screen=pygame.display.set_mode((WIDTH,HEIGHT))
 	pygame.display.set_caption('Square Game')
 	background=load_image('images/black_background.png')
-    
-	menu.menu(background,your_top())
-	
+	menos=menu.menu(background,your_top())
 	square=Square()
-	
-	clock=pygame.time.Clock()
 	
 	contador=0
 	handled=False
 	
 	while True:
+		
 		keys=pygame.key.get_pressed()
 		clic=pygame.mouse.get_pressed()
-		time=clock.tick(60)
+		clock=pygame.time.Clock()
+		time=clock.tick(144)
 		timer=pygame.time.get_ticks()
+		
 		restante,restante_rect=load_text(str(contador),WIDTH-30,30)
-		pasado,pasado_rect=load_text(str(timer/float(1000)),50,30)
+		pasado,pasado_rect=load_text(str((timer-menos)/float(1000)),50,30)
 		
 		for eventos in pygame.event.get():
 			if eventos.type == QUIT:
@@ -148,7 +164,7 @@ def main():
 			handled=True
 			check_rewards(contador)
 		
-		if timer/float(1000)>=60:
+		if (timer-menos)/float(1000)>=60:
 			fin,fin_rect=load_text('You touched the square ' + str(contador) +' times',WIDTH/2,HEIGHT/3)
 			max,max_rect=load_text('Your max touches: ' + str(top),WIDTH/2,HEIGHT*0.66)
 			while True:
@@ -163,8 +179,7 @@ def main():
 				screen.blit(background,(0,0))
 				screen.blit(fin,fin_rect)
 				screen.blit(max,max_rect)
-				pygame.display.flip()
-				
+				pygame.display.flip()				
 		
 		screen.blit(background,(0,0))
 		screen.blit(restante,restante_rect)
