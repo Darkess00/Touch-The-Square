@@ -21,32 +21,32 @@ class Square(pygame.sprite.Sprite):
 	def update(self,time):
 		
 		if self.rect.left<=0:
-			self.speedx=random.randint(5,10)*random.random()
+			self.speedx=random.randint(5,10)*random.uniform(0.4,1)
 			if(self.rect.centery<HEIGHT/2):
-				self.speedy=random.randint(5,10)*random.random()
+				self.speedy=random.randint(5,10)*random.uniform(0.4,1)
 			elif(self.rect.centery>=HEIGHT/2):
-				self.speedy=random.randint(-10,-5)*random.random()
+				self.speedy=random.randint(-10,-5)*random.uniform(0.4,1)
 		
 		elif self.rect.right>=WIDTH:
-			self.speedx=random.randint(-10,-5)*random.random()
+			self.speedx=random.randint(-10,-5)*random.uniform(0.4,1)
 			if(self.rect.centery<HEIGHT/2):
-				self.speedy=random.randint(5,10)*random.random()
+				self.speedy=random.randint(5,10)*random.uniform(0.4,1)
 			elif(self.rect.centery>=HEIGHT/2):
-				self.speedy=random.randint(-10,-5)*random.random()
+				self.speedy=random.randint(-10,-5)*random.uniform(0.4,1)
 				
 		if self.rect.top<=0:
-			self.speedy=random.randint(5,10)*random.random()
+			self.speedy=random.randint(5,10)*random.uniform(0.4,1)
 			if self.rect.centerx<WIDTH/2:
-				self.speedx=random.randint(5,10)*random.random()
+				self.speedx=random.randint(5,10)*random.uniform(0.4,1)
 			elif(self.rect.centery>=HEIGHT/2):
-				self.speedx=random.randint(-10,-5)*random.random()
+				self.speedx=random.randint(-10,-5)*random.uniform(0.4,1)
 		
 		elif self.rect.bottom>=HEIGHT:
-			self.speedy=random.randint(-10,-5)*random.random()
+			self.speedy=random.randint(-10,-5)*random.uniform(0.4,1)
 			if(self.rect.centerx<WIDTH/2):
-				self.speedx=random.randint(5,10)*random.random()
+				self.speedx=random.randint(5,10)*random.uniform(0.4,1)
 			elif(self.rect.centerx>=WIDTH/2):
-				self.speedx=random.randint(-10,-5)*random.random()
+				self.speedx=random.randint(-10,-5)*random.uniform(0.4,1)
 		
 		self.rect.centerx+=self.speedx*time
 		self.rect.centery+=self.speedy*time
