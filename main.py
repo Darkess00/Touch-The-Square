@@ -14,43 +14,43 @@ REWARDS = {'1': 20, '2': 30, '3': 40, '4': 50, '5': 60}
 
 #clases
 class Square(pygame.sprite.Sprite):
-	def __init__(self):
+	def __init__(self,info):
 		pygame.sprite.Sprite.__init__(self)
 		self.image=load_image('images/square.png')
 		self.rect=self.image.get_rect()
-		self.rect.centerx=WIDTH/2
-		self.rect.centery=HEIGHT/2
+		self.rect.centerx=info.current_w/2
+		self.rect.centery=info.current_h/2
 		self.speedx=3
 		self.speedy=3
 		
-	def update(self,time):
+	def update(self,time,info):
 		
 		if self.rect.left<=0:
 			self.speedx=random.randint(5,10)*random.uniform(0.4,1)
-			if(self.rect.centery<HEIGHT/2):
+			if(self.rect.centery<info.current_h/2):
 				self.speedy=random.randint(5,10)*random.uniform(0.4,1)
-			elif(self.rect.centery>=HEIGHT/2):
+			elif(self.rect.centery>=info.current_h/2):
 				self.speedy=random.randint(-10,-5)*random.uniform(0.4,1)
 		
-		elif self.rect.right>=WIDTH:
+		elif self.rect.right>=info.current_w:
 			self.speedx=random.randint(-10,-5)*random.uniform(0.4,1)
-			if(self.rect.centery<HEIGHT/2):
+			if(self.rect.centery<info.current_h/2):
 				self.speedy=random.randint(5,10)*random.uniform(0.4,1)
-			elif(self.rect.centery>=HEIGHT/2):
+			elif(self.rect.centery>=info.current_h/2):
 				self.speedy=random.randint(-10,-5)*random.uniform(0.4,1)
 				
 		if self.rect.top<=0:
 			self.speedy=random.randint(5,10)*random.uniform(0.4,1)
-			if self.rect.centerx<WIDTH/2:
+			if self.rect.centerx<info.current_w/2:
 				self.speedx=random.randint(5,10)*random.uniform(0.4,1)
-			elif(self.rect.centery>=HEIGHT/2):
+			elif(self.rect.centery>=info.current_h/2):
 				self.speedx=random.randint(-10,-5)*random.uniform(0.4,1)
 		
-		elif self.rect.bottom>=HEIGHT:
+		elif self.rect.bottom>=info.current_h:
 			self.speedy=random.randint(-10,-5)*random.uniform(0.4,1)
-			if(self.rect.centerx<WIDTH/2):
+			if(self.rect.centerx<info.current_w/2):
 				self.speedx=random.randint(5,10)*random.uniform(0.4,1)
-			elif(self.rect.centerx>=WIDTH/2):
+			elif(self.rect.centerx>=info.current_w/2):
 				self.speedx=random.randint(-10,-5)*random.uniform(0.4,1)
 		
 		self.rect.centerx+=self.speedx*time
@@ -128,11 +128,14 @@ def write_top(top):
 #--------------------------------------------------
 def main():
 	intento=0
-	screen=pygame.display.set_mode((WIDTH,HEIGHT))
+	#screen=pygame.display.set_mode((WIDTH,HEIGHT))
+	info=pygame.display.Info()
+	screen=pygame.display.set_mode((info.current_w,info.current_h))
+	
 	pygame.display.set_caption('Square Game')
 	background=load_image('images/black_background.png')
 	menos=menu.menu(background,your_top())
-	square=Square()
+	square=Square(info)
 	
 	if menos=='quit':
 		return None
@@ -152,7 +155,7 @@ def main():
 		time=clock.tick(144)
 		timer=pygame.time.get_ticks()-intento
 		
-		restante,restante_rect=load_text(str(contador),WIDTH-30,30)
+		restante,restante_rect=load_text(str(contador),info.current_w-30,30)
 		pasado,pasado_rect=load_text(str((timer-menos)/float(1000)),50,30)
 		
 		for eventos in pygame.event.get():
@@ -162,7 +165,7 @@ def main():
 			if eventos.type == MOUSEBUTTONUP:
 				handled=False
 			if eventos.type == MOUSEBUTTONDOWN:
-				square.update(time)      
+				square.update(time,info)      
 				
 		if contador<your_top():
 			top=your_top()
@@ -171,7 +174,7 @@ def main():
 		
 		write_top(top)
 		                
-		square.update(time)
+		square.update(time,info)
 		
 		if pygame.Rect.collidepoint(square.rect,pygame.mouse.get_pos()) and not handled:
 			contador +=1
@@ -182,8 +185,8 @@ def main():
 			break
 		
 		if (timer-menos)/float(1000)>=60:
-			fin,fin_rect=load_text('You touched the square ' + str(contador) +' times',WIDTH/2,HEIGHT/3)
-			max,max_rect=load_text('Your max touches: ' + str(top),WIDTH/2,HEIGHT*0.66)
+			fin,fin_rect=load_text('You touched the square ' + str(contador) +' times',info.current_w/2,info.current_h/3)
+			max,max_rect=load_text('Your max touches: ' + str(top),info.current_w/2,info.current_h*0.66)
 			while True:
 				for events in pygame.event.get():
 					if events.type==QUIT:
@@ -200,7 +203,8 @@ def main():
 				screen.blit(max,max_rect)
 				pygame.display.flip()				
 		
-		screen.blit(background,(0,0))
+		screen.fill((0,0,0))
+		#screen.blit(background,(0,0))
 		screen.blit(restante,restante_rect)
 		screen.blit(pasado,pasado_rect)
 		screen.blit(square.image,square.rect)

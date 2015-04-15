@@ -33,12 +33,14 @@ def load_text(texto,x,y,color=(255,255,255)):
 
 def menu(background,top):
 	pygame.init()
-	screen=pygame.display.set_mode((WIDTH,HEIGHT))
+	#screen=pygame.display.set_mode((WIDTH,HEIGHT))
+	info=pygame.display.Info()
+	screen=pygame.display.set_mode((info.current_w,info.current_h))
 	pygame.display.set_caption('Square Game')
-	opcion1=Texto('New Game',WIDTH/2,HEIGHT/4)
-	opcion2=Texto('Rewards (Useless)',WIDTH/2,HEIGHT/2)
-	opcion3=Texto('Rankings (Useless)',WIDTH/2,HEIGHT*0.75)
-	max=Texto('Max: ' + str(top),WIDTH*0.8,HEIGHT/2,(255,255,0))
+	opcion1=Texto('New Game',info.current_w/2,info.current_h/4)
+	opcion2=Texto('Rewards (Useless)',info.current_w/2,info.current_h/2)
+	opcion3=Texto('Rankings (Useless)',info.current_w/2,info.current_h*0.75)
+	max=Texto('Max: ' + str(top),info.current_w*0.8,info.current_h/2,(255,255,0))
 	clock=pygame.time.Clock()
 	contador = 0
 	print 'pene'
