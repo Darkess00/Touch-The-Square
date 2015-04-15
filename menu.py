@@ -31,7 +31,7 @@ def load_text(texto,x,y,color=(255,255,255)):
 	return salida, salida_rect     
  
 
-def menu(background,top):
+def menu(top):
 	pygame.init()
 	#screen=pygame.display.set_mode((WIDTH,HEIGHT))
 	info=pygame.display.Info()
@@ -76,7 +76,8 @@ def menu(background,top):
 			return 'quit'
 			break
 		
-		screen.blit(background,(0,0))
+		screen.fill((0,0,0))
+		#screen.blit(background,(0,0))
 		#screen.blit(i.text,i.text_rect)
 		screen.blit(opcion1.text,opcion1.text_rect)
 		screen.blit(opcion2.text,opcion2.text_rect)

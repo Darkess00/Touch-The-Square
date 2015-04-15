@@ -133,8 +133,8 @@ def main():
 	screen=pygame.display.set_mode((info.current_w,info.current_h))
 	
 	pygame.display.set_caption('Square Game')
-	background=load_image('images/black_background.png')
-	menos=menu.menu(background,your_top())
+	#background=load_image('images/black_background.png')
+	menos=menu.menu(your_top())
 	square=Square(info)
 	
 	if menos=='quit':
