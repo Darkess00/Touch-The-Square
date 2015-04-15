@@ -2,6 +2,11 @@
 import pygame, random, sys, menu
 from pygame.locals import *
 
+try:
+	import android
+except ImportError:
+	android = None
+
 #constantes
 WIDTH = 640
 HEIGHT = 480
@@ -122,14 +127,22 @@ def write_top(top):
 
 #--------------------------------------------------
 def main():
+	intento=0
 	screen=pygame.display.set_mode((WIDTH,HEIGHT))
 	pygame.display.set_caption('Square Game')
 	background=load_image('images/black_background.png')
 	menos=menu.menu(background,your_top())
 	square=Square()
 	
+	if menos=='quit':
+		return None
+	
 	contador=0
 	handled=False
+	
+	if android:
+		android.init()
+		android.map_key(android.KEYCODE_BACK, K_ESCAPE)
 	
 	while True:
 		
@@ -137,14 +150,15 @@ def main():
 		clic=pygame.mouse.get_pressed()
 		clock=pygame.time.Clock()
 		time=clock.tick(144)
-		timer=pygame.time.get_ticks()
+		timer=pygame.time.get_ticks()-intento
 		
 		restante,restante_rect=load_text(str(contador),WIDTH-30,30)
 		pasado,pasado_rect=load_text(str((timer-menos)/float(1000)),50,30)
 		
 		for eventos in pygame.event.get():
 			if eventos.type == QUIT:
-				sys.exit(0)
+				pygame.quit()
+				break
 			if eventos.type == MOUSEBUTTONUP:
 				handled=False
 			if eventos.type == MOUSEBUTTONDOWN:
@@ -159,10 +173,13 @@ def main():
 		                
 		square.update(time)
 		
-		if clic[0] and pygame.Rect.collidepoint(square.rect,pygame.mouse.get_pos()) and not handled:
+		if pygame.Rect.collidepoint(square.rect,pygame.mouse.get_pos()) and not handled:
 			contador +=1
 			handled=True
 			check_rewards(contador)
+			
+		if keys[K_ESCAPE]:
+			break
 		
 		if (timer-menos)/float(1000)>=60:
 			fin,fin_rect=load_text('You touched the square ' + str(contador) +' times',WIDTH/2,HEIGHT/3)
@@ -170,11 +187,13 @@ def main():
 			while True:
 				for events in pygame.event.get():
 					if events.type==QUIT:
-						sys.exit(0)
+						pygame.quit()
 						break
 					if events.type==KEYDOWN:
-						sys.exit(0)
+						pygame.quit()
 						break
+					if events.type==MOUSEBUTTONDOWN:
+						main()
 						
 				screen.blit(background,(0,0))
 				screen.blit(fin,fin_rect)
@@ -191,3 +210,4 @@ def main():
 if __name__ == '__main__':
 	pygame.init()
 	main()
+	pygame.quit()

@@ -1,6 +1,11 @@
 import pygame, sys, rewards
 from pygame.locals import *
 
+try:
+	import android
+except ImportError:
+	android = None
+
 WIDTH = 640
 HEIGHT = 480
 
@@ -31,31 +36,42 @@ def menu(background,top):
 	screen=pygame.display.set_mode((WIDTH,HEIGHT))
 	pygame.display.set_caption('Square Game')
 	opcion1=Texto('New Game',WIDTH/2,HEIGHT/4)
-	opcion2=Texto('Rewards',WIDTH/2,HEIGHT/2)
-	opcion3=Texto('Rankings',WIDTH/2,HEIGHT*0.75)
+	opcion2=Texto('Rewards (Useless)',WIDTH/2,HEIGHT/2)
+	opcion3=Texto('Rankings (Useless)',WIDTH/2,HEIGHT*0.75)
 	max=Texto('Max: ' + str(top),WIDTH*0.8,HEIGHT/2,(255,255,0))
-	#clock=pygame.time.Clock()
+	clock=pygame.time.Clock()
 	contador = 0
+	print 'pene'
+	if android:
+		android.init()
+		android.map_key(android.KEYCODE_BACK, K_ESCAPE)
+	
 	while True:
+		keys=pygame.key.get_pressed()
 		clic=pygame.mouse.get_pressed()
 		contador += 1
 		i=Texto(str(contador),50,50)
-		#time=clock.tick(60)
+		time=clock.tick(144)
+		print pygame.mouse.get_pos()
 	
 		for event in pygame.event.get():
 			if event.type == QUIT:
-				sys.exit(0)
+				return 'quit'
 				break
 		
-		if clic[0] and opcion1.text_rect.collidepoint(pygame.mouse.get_pos()):
+		if pygame.Rect.collidepoint(opcion1.text_rect,pygame.mouse.get_pos()):
 			clock=pygame.time.Clock()
 			timer=pygame.time.get_ticks()
 			return timer
 			break
-		if clic[0] and pygame.Rect.collidepoint(opcion2.text_rect,pygame.mouse.get_pos()):
+		if pygame.Rect.collidepoint(opcion2.text_rect,pygame.mouse.get_pos()):
 			rewards.rewards()
-			break
-		if clic[0] and pygame.Rect.collidepoint(opcion3.text_rect,pygame.mouse.get_pos()):
+			pass
+		if pygame.Rect.collidepoint(opcion3.text_rect,pygame.mouse.get_pos()):
+			pass
+			
+		if keys[K_ESCAPE]:
+			return 'quit'
 			break
 		
 		screen.blit(background,(0,0))
