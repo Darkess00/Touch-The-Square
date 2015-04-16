@@ -189,16 +189,13 @@ def main():
 			max,max_rect=load_text('Your max touches: ' + str(top),info.current_w/2,info.current_h*0.66)
 			while True:
 				for events in pygame.event.get():
-					if events.type==QUIT:
-						pygame.quit()
-						break
+					if events.type==MOUSEBUTTONDOWN:
+						main()
 					if events.type==KEYDOWN:
 						pygame.quit()
 						break
-					if events.type==MOUSEBUTTONDOWN:
-						main()
 						
-				screen.blit(background,(0,0))
+				screen.fill((0,0,0))
 				screen.blit(fin,fin_rect)
 				screen.blit(max,max_rect)
 				pygame.display.flip()				

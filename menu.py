@@ -54,11 +54,14 @@ def menu(top):
 		contador += 1
 		i=Texto(str(contador),50,50)
 		time=clock.tick(144)
-		print pygame.mouse.get_pos()
+		#print pygame.mouse.get_pos()
 	
 		for event in pygame.event.get():
 			if event.type == QUIT:
-				return 'quit'
+				pygame.quit()
+				break
+			if event.type==KEYDOWN and keys[K_ESCAPE]:
+				pygame.quit()
 				break
 		
 		if pygame.Rect.collidepoint(opcion1.text_rect,pygame.mouse.get_pos()):
@@ -73,7 +76,7 @@ def menu(top):
 			pass
 			
 		if keys[K_ESCAPE]:
-			return 'quit'
+			pygame.quit()
 			break
 		
 		screen.fill((0,0,0))
