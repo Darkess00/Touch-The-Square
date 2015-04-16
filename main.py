@@ -14,9 +14,10 @@ REWARDS = {'1': 20, '2': 30, '3': 40, '4': 50, '5': 60}
 
 #clases
 class Square(pygame.sprite.Sprite):
-	def __init__(self,info):
+	def __init__(self,info,screen):
 		pygame.sprite.Sprite.__init__(self)
 		self.image=load_image('images/square.png')
+		self.image=pygame.transform.scale(self.image,(info.current_w/15,info.current_w/15))
 		self.rect=self.image.get_rect()
 		self.rect.centerx=info.current_w/2
 		self.rect.centery=info.current_h/2
@@ -135,7 +136,7 @@ def main():
 	pygame.display.set_caption('Square Game')
 	#background=load_image('images/black_background.png')
 	menos=menu.menu(your_top())
-	square=Square(info)
+	square=Square(info,screen)
 	
 	if menos=='quit':
 		return None
@@ -198,8 +199,9 @@ def main():
 				screen.fill((0,0,0))
 				screen.blit(fin,fin_rect)
 				screen.blit(max,max_rect)
-				pygame.display.flip()				
-		
+				pygame.display.flip()
+				
+		print square.rect
 		screen.fill((0,0,0))
 		#screen.blit(background,(0,0))
 		screen.blit(restante,restante_rect)
