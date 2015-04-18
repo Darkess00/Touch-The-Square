@@ -11,6 +11,7 @@ except ImportError:
 WIDTH = 640
 HEIGHT = 480
 REWARDS = {'1': 20, '2': 30, '3': 40, '4': 50, '5': 60}
+salir=False
 
 #clases
 class Square(pygame.sprite.Sprite):
@@ -195,12 +196,13 @@ def main():
 					if events.type==KEYDOWN:
 						pygame.quit()
 						break
-						
+					
 				screen.fill((0,0,0))
 				screen.blit(fin,fin_rect)
 				screen.blit(max,max_rect)
 				pygame.display.flip()
-				
+
+			
 		print square.rect
 		screen.fill((0,0,0))
 		#screen.blit(background,(0,0))
